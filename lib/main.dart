@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:helpmestudy/pages/home_page.dart';
+import 'package:helpmestudy/pages/signup_page.dart';
 import 'pages/login_page.dart';
 
 void main() {
@@ -12,7 +14,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: const LoginFormScreen(),
+      routes: {
+        '/signup': (context) => const SignupFormScreen(),
+        '/login': (context) => const LoginFormScreen(),
+        '/home': (context) => const HomePage(),
+      },
     );
   }
 }
