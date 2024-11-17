@@ -8,15 +8,18 @@ import java.util.Optional;
 
 @Service
 public class UserService {
+    private final UserRepository userRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public Optional<User> findByUsernameAndPassword(String name, String password) {
         Optional<User> findUser = userRepository.findByUsernameAndPassword(name, password);
 
         if (findUser.isEmpty()) {
-            throw new RuntimeException("User not found");
+            throw new IllegalArgumentException("User not found");
         }
 
         return findUser;
