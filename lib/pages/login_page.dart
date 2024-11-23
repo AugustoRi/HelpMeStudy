@@ -14,11 +14,13 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
-  Future<void> _login() async {
+  Future<void> _login(BuildContext context) async {
     final String username = usernameController.text;
     final String password = passwordController.text;
 
     final response = await login(username, password);
+
+    if (!context.mounted) return;
 
     if (response.statusCode == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -26,14 +28,15 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
           content: Text('Login successful'),
         ),
       );
+
       Navigator.pushNamed(context, '/home');
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Login failed'),
-        ),
-      );
     }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Login failed'),
+      ),
+    );
   }
 
   @override
@@ -72,7 +75,7 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
               ),
               const SizedBox(height: 15),
               ButtonAuthComponent(onTap: () {
-                _login();
+                _login(context);
               }),
               const SizedBox(height: 150),
               Row(

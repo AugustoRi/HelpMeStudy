@@ -15,17 +15,20 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
-  Future<void> _register() async {
+  Future<void> _register(BuildContext context) async {
     if (passwordController.text != confirmPasswordController.text) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Passwords do not match${passwordController.text}${confirmPasswordController.text}'),
         ),
       );
+      
       return;
     }
 
     final response = await register(usernameController.text, passwordController.text);
+
+    if (!context.mounted) return;
 
     if (response.statusCode == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -34,13 +37,13 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
         ),
       );
       Navigator.pushNamed(context, '/login');
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Registration failed'),
-        ),
-      );
     }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Registration failed'),
+      ),
+    );
   }
   
   @override
@@ -97,7 +100,7 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                 const SizedBox(height: 15),
           
                 ButtonAuthComponent(onTap: () {
-                  _register();
+                  _register(context);
                 }),
           
                 const SizedBox(height: 100),
