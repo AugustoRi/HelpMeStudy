@@ -1,0 +1,7 @@
+CREATE TABLE users (
+    id INT NOT NULL,
+    logon VARCHAR(60) NOT NULL,
+    password VARCHAR(60) NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE INDEX id_UNIQUE (id ASC) VISIBLE,
+    UNIQUE INDEX logon_UNIQUE (logon ASC) VISIBLE);

@@ -1,20 +1,31 @@
 package com.helpemestudy.api.entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.Column;
+
 import lombok.EqualsAndHashCode;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
-@Entity @Getter @Setter @EqualsAndHashCode
+@Entity
+@Table(name = "users")
+@Builder
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @EqualsAndHashCode
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "logon")
     private String username;
+
     private String password;
 }
 
