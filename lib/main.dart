@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:helpmestudy/pages/home_page.dart';
 import 'package:helpmestudy/pages/signup_page.dart';
+import 'package:helpmestudy/routes/app_pages.dart';
 import 'pages/login_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    GetMaterialApp(
+      title: "Application",
+      initialRoute: AppPages.initial,
+      getPages: AppPages.routes,
+      debugShowCheckedModeBanner: false,
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -13,8 +22,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: "Application",
+      home: Text(AppPages.initial),
       debugShowCheckedModeBanner: false,
-      home: const LoginFormScreen(),
       routes: {
         '/signup': (context) => const SignupFormScreen(),
         '/login': (context) => const LoginFormScreen(),
