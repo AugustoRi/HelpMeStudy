@@ -1,25 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:helpmestudy/pages/home_page.dart';
-import 'package:helpmestudy/pages/signup_page.dart';
-import 'pages/login_page.dart';
+import 'package:get/get.dart';
+import 'package:helpmestudy/routes/app_pages.dart';
 
 void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  runApp(
+    GetMaterialApp(
+      title: "Application",
+      initialRoute: AppPages.initial,
+      getPages: AppPages.routes,
       debugShowCheckedModeBanner: false,
-      home: const LoginFormScreen(),
-      routes: {
-        '/signup': (context) => const SignupFormScreen(),
-        '/login': (context) => const LoginFormScreen(),
-        '/home': (context) => const HomePage(),
-      },
-    );
-  }
+    ),
+  );
 }

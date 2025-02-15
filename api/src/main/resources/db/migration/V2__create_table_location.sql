@@ -1,0 +1,9 @@
+CREATE TABLE location (
+    id INT NOT NULL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    type ENUM('folder', 'file') NOT NULL,
+    user_id INT NOT NULL,
+    parent_id INT DEFAULT NULL,
+    FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE,
+    FOREIGN KEY (parent_id) REFERENCES Location(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
