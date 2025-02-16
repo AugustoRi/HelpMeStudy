@@ -6,10 +6,15 @@ abstract class Routes {
   static const home = _Paths.home;
   static const folder = _Paths.folder;
   static const folderDetail = _Paths.folderDetail;
+
+  static const login = _Paths.login;
+  static const signup = _Paths.signup;
 }
 
 abstract class _Paths {
   _Paths._();
+  static const login = '/login';
+  static const signup = '/signup';
   static const home = '/home';
   static const folder = '/folder';
   static const folderDetail = '/folderDetail';
