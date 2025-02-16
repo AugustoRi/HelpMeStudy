@@ -2,12 +2,16 @@ package com.helpemestudy.api.services;
 import com.helpemestudy.api.entities.User;
 import com.helpemestudy.api.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Autowired
@@ -15,18 +19,17 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public Optional<User> findByUsernameAndPassword(String name, String password) {
-        Optional<User> findUser = userRepository.findByUsernameAndPassword(name, password);
-
-        if (findUser.isEmpty()) {
-            throw new IllegalArgumentException("User not found");
-        }
-
-        return findUser;
+    public List<User> getAll() {
+        return userRepository.findAll();
     }
 
     public User saveUser(User user) {
         return userRepository.save(user);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username);
     }
 }
 

@@ -1,25 +1,64 @@
 package com.helpemestudy.api.controllers;
 
+import com.helpemestudy.api.dtos.AuthenticationDTO;
+import com.helpemestudy.api.dtos.RegisterDTO;
+import com.helpemestudy.api.entities.LoginResponseDTO;
 import com.helpemestudy.api.entities.User;
+import com.helpemestudy.api.services.TokenService;
 import com.helpemestudy.api.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.Optional;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("api/users")
 public class UserController {
     private final UserService userService;
+    private final AuthenticationManager authenticationManager;
+    private final TokenService tokenService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, AuthenticationManager authenticationManager, TokenService tokenService) {
         this.userService = userService;
+        this.authenticationManager = authenticationManager;
+        this.tokenService = tokenService;
     }
 
-    @PostMapping("/user")
-    public Optional<User> getUser(@RequestBody User user) {
-        return userService.findByUsernameAndPassword(user.getUsername(), user.getPassword());
+    @PostMapping("/auth/login")
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Validated AuthenticationDTO data) {
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.username(), data.password());
+        var auth = this.authenticationManager.authenticate(usernamePassword);
+
+        var token = tokenService.generateToken((User) auth.getPrincipal());
+
+        return ResponseEntity.ok(new LoginResponseDTO(token));
+    }
+
+    @PostMapping("/auth/register")
+    public ResponseEntity<User> register(@RequestBody @Validated RegisterDTO data) {
+        if (this.userService.loadUserByUsername(data.username()) != null) return ResponseEntity.badRequest().build();
+
+        var encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
+        var newUser = new User(data.username(), encryptedPassword, data.role());
+
+        this.userService.saveUser(newUser);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public List<User> getUsers() {
+        return userService.getAll();
     }
 
     @PostMapping
