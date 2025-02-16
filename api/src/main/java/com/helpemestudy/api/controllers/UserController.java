@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -56,14 +58,26 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/auth/update/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody @Validated RegisterDTO data) {
+        User existingUser = userService.getUserById(Long.valueOf(id));
+
+        if (existingUser == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        existingUser.setUsername(data.username());
+        existingUser.setPassword(new BCryptPasswordEncoder().encode(data.password()));
+        existingUser.setRole(data.role());
+
+        User updatedUser = userService.saveUser(existingUser);
+        return ResponseEntity.ok(updatedUser);
+    }
+
     @GetMapping
     public List<User> getUsers() {
         return userService.getAll();
     }
 
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.saveUser(user);
-    }
 }
 

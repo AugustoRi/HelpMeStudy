@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:helpmestudy/modules/archive/controllers/folder_controller.dart';
-import 'package:helpmestudy/pages/home_page.dart';
+import 'package:helpmestudy/modules/auth/views/update_view.dart';
 
 class FolderView extends GetView<FolderController> {
   final String currentPath;
@@ -123,7 +123,7 @@ class FolderView extends GetView<FolderController> {
               Get.to(
                   () => FolderView(currentPath: currentPath, onBack: onBack));
             } else if (index == 1) {
-              Get.to(() => HomePage());
+              Get.to(() => UpdateView());
             }
           },
         ),

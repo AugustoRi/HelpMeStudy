@@ -36,6 +36,28 @@ class ApiService {
     return response;
   }
 
+Future<http.Response> put(BuildContext context, String endpoint, dynamic body) async {
+    final token = await _storage.read(key: 'jwt_token');
+    final userId = await _storage.read(key: 'userId');
+    final headers = _buildHeaders(token);
+
+    if (userId == null) {
+      throw Exception("User ID não encontrado no armazenamento seguro.");
+    }
+
+    final response = await http.put(
+      Uri.parse('$baseUrl/$endpoint/$userId'),
+      headers: headers,
+      body: body,
+    );
+
+    if (response.statusCode == 401) {
+      _handleUnauthorized(context);
+    }
+
+    return response;
+  }
+
   Map<String, String> _buildHeaders(String? token) {
     return {
       'Content-Type': 'application/json',

@@ -9,12 +9,14 @@ abstract class Routes {
 
   static const login = _Paths.login;
   static const signup = _Paths.signup;
+  static const update = _Paths.update;
 }
 
 abstract class _Paths {
   _Paths._();
   static const login = '/login';
   static const signup = '/signup';
+  static const update = '/update';
   static const home = '/home';
   static const folder = '/folder';
   static const folderDetail = '/folderDetail';
