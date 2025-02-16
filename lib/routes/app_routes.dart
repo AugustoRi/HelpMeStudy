@@ -3,7 +3,6 @@ part of 'app_pages.dart';
 
 abstract class Routes {
   Routes._();
-  static const home = _Paths.home;
   static const folder = _Paths.folder;
   static const folderDetail = _Paths.folderDetail;
 
@@ -17,7 +16,6 @@ abstract class _Paths {
   static const login = '/login';
   static const signup = '/signup';
   static const update = '/update';
-  static const home = '/home';
   static const folder = '/folder';
   static const folderDetail = '/folderDetail';
 }

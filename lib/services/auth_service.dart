@@ -67,7 +67,7 @@ class AuthService {
     try {
       final jwt = JWT.decode(token);
       if (jwt.payload.containsKey('userId')) {
-        await _storage.write(key: 'user_id', value: jwt.payload['userId'].toString());
+        await _storage.write(key: 'userId', value: jwt.payload['userId'].toString());
       } else {
         throw Exception("O token JWT não contém um 'userId'.");
       }

@@ -22,7 +22,6 @@ class UpdateController extends GetxController {
       Get.offNamed(Routes.folder);
     } else {
       Get.snackbar('Error', 'Update failed');
-      // print(response);
     }
   }
 }
