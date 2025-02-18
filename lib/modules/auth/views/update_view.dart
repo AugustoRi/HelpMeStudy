@@ -5,10 +5,10 @@ import 'package:helpmestudy/components/auth/textfield.dart';
 import 'package:helpmestudy/modules/archive/controllers/folder_controller.dart';
 import 'package:helpmestudy/modules/archive/views/folder_view.dart';
 import 'package:helpmestudy/modules/auth/controllers/update_controller.dart';
+import 'package:helpmestudy/modules/responses/views/responses_view.dart';
 import 'package:helpmestudy/routes/app_pages.dart';
 import 'package:helpmestudy/services/auth_service.dart';
 import 'package:path_provider/path_provider.dart';
-
 
 class UpdateView extends GetView<UpdateController> {
   const UpdateView({super.key});
@@ -22,40 +22,46 @@ class UpdateView extends GetView<UpdateController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
-              bottomNavigationBar: BottomNavigationBar(
-          currentIndex: 1,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Tela Inicial',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle),
-              label: 'Perfil',
-            ),
-          ],
-          onTap: (int index) {
-            if (index == 0) {
-              Get.to(() => FutureBuilder<String>(
-                  future: getInitialPath(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      final folderController = Get.find<FolderController>();
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 2,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Tela Inicial',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add_chart),
+            label: 'Respostas Geradas',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle),
+            label: 'Perfil',
+          ),
+        ],
+        onTap: (int index) {
+          if (index == 0) {
+            Get.to(() => FutureBuilder<String>(
+                future: getInitialPath(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    final folderController = Get.find<FolderController>();
 
-                      return FolderView(
-                        currentPath: snapshot.data!,
-                        onBack: () {
-                          folderController.getDir(snapshot.data!);
-                        },
-                      );
-                    }
-                    return const CircularProgressIndicator();
-                  }));
-            } else if (index == 1) {
-              Get.to(() => UpdateView());
-            }
-          },
-        ),
+                    return FolderView(
+                      currentPath: snapshot.data!,
+                      onBack: () {
+                        folderController.getDir(snapshot.data!);
+                      },
+                    );
+                  }
+                  return const CircularProgressIndicator();
+                }));
+          } else if (index == 1) {
+            Get.to(() => ResponsesView());
+          } else if (index == 2) {
+            Get.to(() => UpdateView());
+          }
+        },
+      ),
       body: SafeArea(
         child: Form(
           child: Center(
@@ -88,7 +94,30 @@ class UpdateView extends GetView<UpdateController> {
                   obscureText: true,
                 ),
                 const SizedBox(height: 15),
-                ButtonAuthComponent(onTap: Get.put(UpdateController()).updateUser, label: "Update",),
+                ButtonAuthComponent(
+                  onTap: Get.put(UpdateController()).updateUser,
+                  label: "Update",
+                ),
+                const SizedBox(height: 10),
+                // Botão de excluir usuário
+                ElevatedButton(
+                  onPressed: () async {
+                    bool success = await Get.put(AuthService()).deleteUser();
+                    if (success) {
+                      Get.toNamed(Routes.login); // Redireciona para a tela de login
+                      Get.snackbar("Sucesso", "Usuário excluído com sucesso");
+                    } else {
+                      Get.snackbar("Erro", "Falha ao excluir o usuário");
+                    }
+                  },
+                  child: Text(
+                    'Excluir Conta',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red, // Cor vermelha para destacar
+                  ),
+                ),
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

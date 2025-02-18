@@ -10,6 +10,8 @@ import 'package:helpmestudy/modules/auth/views/login_view.dart';
 import 'package:helpmestudy/modules/auth/views/signup_view.dart';
 import 'package:helpmestudy/modules/auth/middleware/auth_middleware.dart';
 import 'package:helpmestudy/modules/auth/views/update_view.dart';
+import 'package:helpmestudy/modules/responses/bindings/responses_binding.dart';
+import 'package:helpmestudy/modules/responses/views/responses_view.dart';
 import 'package:path_provider/path_provider.dart';
 
 part 'app_routes.dart';
@@ -61,5 +63,11 @@ class AppPages {
       binding: FolderBinding(),
       middlewares: [AuthMiddleware()],
     ),
+    GetPage(
+      name: _Paths.responses,
+      page: () => const ResponsesView(),
+      binding: ResponsesBinding(),
+      middlewares: [AuthMiddleware()],
+    )
   ];
 }

@@ -2,7 +2,7 @@ package com.helpemestudy.api.controllers;
 
 import com.helpemestudy.api.dtos.AuthenticationDTO;
 import com.helpemestudy.api.dtos.RegisterDTO;
-import com.helpemestudy.api.entities.LoginResponseDTO;
+import com.helpemestudy.api.dtos.LoginResponseDTO;
 import com.helpemestudy.api.entities.User;
 import com.helpemestudy.api.services.TokenService;
 import com.helpemestudy.api.services.UserService;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
 
@@ -72,6 +73,16 @@ public class UserController {
 
         User updatedUser = userService.saveUser(existingUser);
         return ResponseEntity.ok(updatedUser);
+    }
+
+    @DeleteMapping("/auth/delete/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable String id) {
+        try {
+            userService.deleteUser(Long.valueOf(id));
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping

@@ -5,13 +5,16 @@ import 'package:get/get.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:helpmestudy/modules/archive/controllers/folder_controller.dart';
 import 'package:helpmestudy/modules/auth/views/update_view.dart';
+import 'package:helpmestudy/modules/responses/views/responses_view.dart';
 import 'package:helpmestudy/services/ia_service.dart';
+import 'package:helpmestudy/services/responses_service.dart';
 import 'package:mime/mime.dart';
 
 class FolderView extends GetView<FolderController> {
   final String currentPath;
   final Function onBack;
   final AIIntegrationService aiService = AIIntegrationService();
+  final ResponseService responsesService = ResponseService();
 
   FolderView({super.key, required this.currentPath, required this.onBack});
 
@@ -109,6 +112,10 @@ class FolderView extends GetView<FolderController> {
               label: 'Tela Inicial',
             ),
             BottomNavigationBarItem(
+              icon: Icon(Icons.add_chart),
+              label: 'Respostas Geradas',
+            ),
+            BottomNavigationBarItem(
               icon: Icon(Icons.account_circle),
               label: 'Perfil',
             ),
@@ -117,6 +124,9 @@ class FolderView extends GetView<FolderController> {
             if (index == 0) {
               Get.to(() => FolderView(currentPath: currentPath, onBack: onBack));
             } else if (index == 1) {
+              Get.to(() => ResponsesView());
+            }
+            else if (index == 2) {
               Get.to(() => UpdateView());
             }
           },
@@ -181,6 +191,7 @@ Future<void> _uploadFile(BuildContext context) async {
     Navigator.of(context).pop();
 
     if (response != null) {
+      await responsesService.saveResponse(context, response);
       _showResponseModal(context, response);
     }
   } else {
