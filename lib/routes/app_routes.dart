@@ -9,6 +9,8 @@ abstract class Routes {
   static const login = _Paths.login;
   static const signup = _Paths.signup;
   static const update = _Paths.update;
+
+  static const responses = _Paths.responses;
 }
 
 abstract class _Paths {
@@ -18,4 +20,5 @@ abstract class _Paths {
   static const update = '/update';
   static const folder = '/folder';
   static const folderDetail = '/folderDetail';
+  static const responses = '/responses';
 }

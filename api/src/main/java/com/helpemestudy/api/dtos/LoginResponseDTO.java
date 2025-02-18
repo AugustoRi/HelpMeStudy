@@ -1,4 +1,4 @@
-package com.helpemestudy.api.entities;
+package com.helpemestudy.api.dtos;
 
 public record LoginResponseDTO(String token) {
 }

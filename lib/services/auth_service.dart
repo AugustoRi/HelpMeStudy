@@ -54,6 +54,30 @@ class AuthService {
     return response.statusCode == 200;
   }
 
+  Future<bool> deleteUser() async {
+    String? userId = await _storage.read(key: 'userId');
+
+    if (userId == null) {
+      throw Exception("User ID não encontrado no armazenamento seguro.");
+    }
+
+    final response = await http.delete(
+      Uri.parse('$baseUrl/api/users/auth/delete/$userId'),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${await _storage.read(key: 'jwt_token')}',
+      },
+    );
+
+    if (response.statusCode == 204) {
+      await logout();
+      return true;
+    }
+
+    return false;
+  }
+
+
   Future<void> _saveToken(String token) async {
     await _storage.write(key: 'jwt_token', value: token);
   }
